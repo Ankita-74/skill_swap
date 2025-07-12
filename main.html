@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TalentTrade Platform</title>
+<style>
+  /* Reset & base */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fafafa;
+    color: #222;
+    min-height: 100vh;
+  }
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgb(0 0 0 / 0.1);
+    padding-bottom: 40px;
+  }
+
+  /* Header */
+  header {
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    font-weight: 600;
+    font-size: 1.6rem;
+  }
+  header .user-icons {
+    display: flex;
+    gap: 10px;
+  }
+  .user-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #3498db;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* Filter/Search bar */
+  .filter-search {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .filter-search select,
+  .filter-search input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .filter-search input[type="text"] {
+    flex-grow: 1;
+  }
+  .filter-search button {
+    padding: 8px 16px;
+    background: #3498db;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+  .filter-search button:hover {
+    background: #217dbb;
+  }
+
+  /* User cards list */
+  .user-list {
+    padding: 0 10px;
+  }
+  .user-card {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .user-card .profile-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #ddd;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+  .user-info {
+    flex-grow: 1;
+  }
+  .user-info h3 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+  }
+  .skills {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .skills span {
+    border-radius: 12px;
+    padding: 3px 10px;
+    border: 1.5px solid #666;
+    background: #f9f9f9;
+    color: #444;
+    white-space: nowrap;
+  }
+  .skills.offered span {
+    border-color: #3498db;
+    color: #2a71d0;
+    background: #e1eaff;
+  }
+  .skills.wanted span {
+    border-color: #27ae60;
+    color: #1f7d42;
+    background: #d9f3e2;
+  }
+
+  /* Availability label */
+  .availability {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  /* Request button */
+  .request-btn {
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+  }
+  .request-btn:hover {
+    background: #217dbb;
+  }
+
+  /* Rating */
+  .rating {
+    margin-left: 15px;
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 600;
+  }
+
+  /* Pagination */
+  .pagination {
+    text-align: center;
+    margin-top: 30px;
+    user-select: none;
+  }
+  .pagination button {
+    border: 1.5px solid #3498db;
+    background: white;
+    color: #3498db;
+    font-weight: 600;
+    padding: 6px 14px;
+    margin: 0 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .pagination button:hover {
+    background: #3498db;
+    color: white;
+  }
+  .pagination button.active {
+    background: #3498db;
+    color: white;
+    cursor: default;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .user-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .request-btn {
+      align-self: stretch;
+      width: 100%;
+    }
+    .rating {
+      margin-left: 0;
+      margin-top: 6px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>TalentTrade</h1>
+    <div class="user-icons">
+      <div class="user-icon" title="User T">T</div>
+      <div class="user-icon" title="User C">C</div>
+      <div class="user-icon" title="User W">W</div>
+      <div class="user-icon" title="User A">A</div>
+    </div>
+  </header>
+
+  <section class="filter-search">
+    <select id="availabilityFilter" aria-label="Filter by Availability">
+      <option value="">Availability</option>
+      <option value="Weekends">Weekends</option>
+      <option value="Evenings">Evenings</option>
+      <option value="Weekdays">Weekdays</option>
+      <option value="Any">Any</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Search skills..." aria-label="Search skills" />
+    <button id="searchBtn">Search</button>
+  </section>
+
+  <section class="user-list" id="userList">
+    <!-- User cards injected here -->
+  </section>
+
+  <section class="pagination" id="pagination">
+    <!-- Pagination buttons injected here -->
+  </section>
+</div>
+
+<script>
+  const users = [
+    {
+      id: 1,
+      name: "Rudra Patel",
+      photo: "https://randomuser.me/api/portraits/men/75.jpg",
+      skillsOffered: ["JavaScript", "Python"],
+      skillsWanted: ["Marketing", "Design"],
+      availability: "Weekends",
+      rating: 3.9
+    },
+    {
+      id: 2,
+      name: "Michell",
+      photo: "https://randomuser.me/api/portraits/women/65.jpg",
+      skillsOffered: ["JavaScript", "Python"],
+      skillsWanted: ["Marketing", "Graphic designer"],
+      availability: "Evenings",
+      rating: 2.5
+    },
+    {
+      id: 3,
+      name: "Joe Wills",
+      photo: "https://randomuser.me/api/portraits/men/85.jpg",
+      skillsOffered: ["JavaScript", "Python"],
+      skillsWanted: ["Marketing", "Graphic designer"],
+      availability: "Weekdays",
+      rating: 4.0
+    },
+    {
+      id: 4,
+      name: "Priya Singh",
+      photo: "https://randomuser.me/api/portraits/women/58.jpg",
+      skillsOffered: ["UX Design", "HTML", "CSS"],
+      skillsWanted: ["JavaScript", "SEO"],
+      availability: "Any",
+      rating: 4.8
+    },
+    {
+      id: 5,
+      name: "Arjun Mehta",
+      photo: "https://randomuser.me/api/portraits/men/45.jpg",
+      skillsOffered: ["Node.js", "MongoDB"],
+      skillsWanted: ["UI Design", "Figma"],
+      availability: "Weekends",
+      rating: 4.1
+    }
+  ];
+
+  const userListEl = document.getElementById('userList');
+  const paginationEl = document.getElementById('pagination');
+  const availabilityFilterEl = document.getElementById('availabilityFilter');
+  const searchInputEl = document.getElementById('searchInput');
+  const searchBtnEl = document.getElementById('searchBtn');
+
+  let currentPage = 1;
+  const itemsPerPage = 2;
+  let filteredUsers = [...users];
+
+  function renderUsers() {
+    userListEl.innerHTML = '';
+    if(filteredUsers.length === 0) {
+      userListEl.innerHTML = '<p style="text-align:center; color:#666;">No users found.</p>';
+      paginationEl.innerHTML = '';
+      return;
+    }
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginatedUsers = filteredUsers.slice(start, start + itemsPerPage);
+
+    paginatedUsers.forEach(user => {
+      const card = document.createElement('div');
+      card.className = 'user-card';
+
+      const skillsOfferedHtml = user.skillsOffered.map(s => `<span class="offered">${s}</span>`).join(' ');
+      const skillsWantedHtml = user.skillsWanted.map(s => `<span class="wanted">${s}</span>`).join(' ');
+
+      card.innerHTML = `
+        <img src="${user.photo}" alt="${user.name} profile photo" class="profile-photo" />
+        <div class="user-info">
+          <h3>${user.name}</h3>
+          <div class="skills offered">Skills Offered => ${skillsOfferedHtml}</div>
+          <div class="skills wanted">Skill wanted => ${skillsWantedHtml}</div>
+          <div class="availability">Availability: ${user.availability}</div>
+        </div>
+        <button class="request-btn" onclick="requestSwap('${user.name}')">Request</button>
+        <div class="rating">${user.rating.toFixed(1)}/5</div>
+      `;
+      userListEl.appendChild(card);
+    });
+
+    renderPagination();
+  }
+
+  function renderPagination() {
+    paginationEl.innerHTML = '';
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    if(totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '<';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+      if(currentPage > 1) {
+        currentPage--;
+        renderUsers();
+      }
+    };
+    paginationEl.appendChild(prevBtn);
+
+    for(let i=1; i<= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      if(i === currentPage) btn.classList.add('active');
+      btn.onclick = () => {
+        currentPage = i;
+        renderUsers();
+      };
+      paginationEl.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = '>';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+      if(currentPage < totalPages) {
+        currentPage++;
+        renderUsers();
+      }
+    };
+    paginationEl.appendChild(nextBtn);
+  }
+
+  function requestSwap(userName) {
+    alert(`Swap request sent to ${userName}!`);
+  }
+
+  function filterUsers() {
+    const availability = availabilityFilterEl.value.toLowerCase();
+    const search = searchInputEl.value.toLowerCase();
+
+    filteredUsers = users.filter(user => {
+      const availabilityMatch = !availability || user.availability.toLowerCase() === availability;
+      const skillMatch = !search || 
+        user.skillsOffered.some(s => s.toLowerCase().includes(search)) ||
+        user.skillsWanted.some(s => s.toLowerCase().includes(search));
+      return availabilityMatch && skillMatch;
+    });
+    currentPage = 1;
+    renderUsers();
+  }
+
+  searchBtnEl.addEventListener('click', filterUsers);
+  availabilityFilterEl.addEventListener('change', filterUsers);
+
+  // Initial render
+  renderUsers();
+</script>
+
+</body>
+</html>

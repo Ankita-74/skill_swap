@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up - Skill Swap</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      max-width: 400px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #1a73e8;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="file"],
+    .skills-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1.5px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    input:focus, .skills-input:focus {
+      border-color: #1a73e8;
+    }
+
+    .photo-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .photo-preview img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #1a73e8;
+    }
+
+    .tag {
+      background-color: #1a73e8;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin: 4px 4px 0 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .remove-tag {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tags-container {
+      border: 1.5px solid #ccc;
+      padding: 6px;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .skills-input {
+      border: none;
+      flex: 1;
+      padding: 6px 8px;
+    }
+
+    .availability-options label {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .toggle-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 24px;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    input:checked + .slider {
+      background-color: #1a73e8;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    button.save-btn {
+      width: 100%;
+      background-color: #1a73e8;
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button.save-btn:hover {
+      background-color: #155ab6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Sign Up</h1>
+
+  <label for="nameInput">Name *</label>
+  <input type="text" id="nameInput" placeholder="Enter your name" required>
+
+  <label for="emailInput">Email *</label>
+  <input type="email" id="emailInput" placeholder="Enter your email" required>
+
+  <label for="passwordInput">Password *</label>
+  <input type="password" id="passwordInput" placeholder="Enter password" required>
+
+  <label for="confirmPasswordInput">Confirm Password *</label>
+  <input type="password" id="confirmPasswordInput" placeholder="Confirm password" required>
+
+  <label for="locationInput">Location</label>
+  <input type="text" id="locationInput" placeholder="Enter your location">
+
+  <label>Profile Photo</label>
+  <div class="photo-preview">
+    <img id="photoImg" src="https://via.placeholder.com/60" alt="Preview">
+    <input type="file" id="photoInput" accept="image/*">
+  </div>
+
+  <label>Skills Offered</label>
+  <div class="tags-container" id="skillsOfferedContainer">
+    <input type="text" class="skills-input" id="skillsOfferedInput" placeholder="Press Enter to add skill">
+  </div>
+
+  <label>Skills Wanted</label>
+  <div class="tags-container" id="skillsWantedContainer">
+    <input type="text" class="skills-input" id="skillsWantedInput" placeholder="Press Enter to add skill">
+  </div>
+
+  <label>Availability</label>
+  <div class="availability-options">
+    <label><input type="checkbox" value="Weekdays"> Weekdays</label>
+    <label><input type="checkbox" value="Weekends"> Weekends</label>
+    <label><input type="checkbox" value="Evenings"> Evenings</label>
+    <label><input type="checkbox" value="Mornings"> Mornings</label>
+  </div>
+
+  <div class="toggle-group">
+    <span>Make Public</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="publicToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <button class="save-btn" id="saveBtn">Create Account</button>
+</div>
+
+<script>
+  const photoInput = document.getElementById('photoInput');
+  const photoImg = document.getElementById('photoImg');
+
+  photoInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => photoImg.src = e.target.result;
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function setupTags(containerId, inputId) {
+    const container = document.getElementById(containerId);
+    const input = document.getElementById(inputId);
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const value = input.value.trim();
+        if (!value) return;
+
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.innerHTML = `${value}<span class="remove-tag">&times;</span>`;
+        container.insertBefore(tag, input);
+
+        tag.querySelector('.remove-tag').onclick = () => tag.remove();
+        input.value = '';
+      }
+    });
+  }
+
+  setupTags('skillsOfferedContainer', 'skillsOfferedInput');
+  setupTags('skillsWantedContainer', 'skillsWantedInput');
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const name = document.getElementById('nameInput').value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const password = document.getElementById('passwordInput').value;
+    const confirmPassword = document.getElementById('confirmPasswordInput').value;
+    const location = document.getElementById('locationInput').value.trim();
+    const skillsOffered = [...document.querySelectorAll('#skillsOfferedContainer .tag')].map(tag => tag.textContent.slice(0, -1));
+    const skillsWanted = [...document.querySelectorAll('#skillsWantedContainer .tag')].map(tag => tag.textContent.slice(0, -1));
+    const availability = [...document.querySelectorAll('.availability-options input:checked')].map(cb => cb.value);
+    const isPublic = document.getElementById('publicToggle').checked;
+    const photoFile = photoInput.files[0];
+    const photoName = photoFile ? photoFile.name : '(none)';
+
+    if (!name || !email || !password || !confirmPassword) {
+      return alert('Please fill all required fields.');
+    }
+
+    if (password !== confirmPassword) {
+      return alert('Passwords do not match.');
+    }
+
+    // Simulate account creation
+    alert(`Account Created Successfully!\n
+Name: ${name}
+Email: ${email}
+Location: ${location || '(none)'}
+Skills Offered: ${skillsOffered.join(', ') || '(none)'}
+Skills Wanted: ${skillsWanted.join(', ') || '(none)'}
+Availability: ${availability.join(', ') || '(none)'}
+Public: ${isPublic ? 'Yes' : 'No'}
+Photo: ${photoName}`);
+
+    // Redirect to screen2.html
+    window.location.href = 'screen2.html';
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .profile-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ccc;
+    }
+    h2 {
+      margin: 0;
+    }
+    .section {
+      margin-top: 20px;
+    }
+    .skills span {
+      display: inline-block;
+      margin: 5px;
+      padding: 6px 12px;
+      background-color: #3498db;
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+    .message-box {
+      margin-top: 30px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-header">
+      <img id="photo" class="profile-photo" src="" alt="Profile Photo">
+      <div>
+        <h2 id="name"></h2>
+        <p id="availability"></p>
+        <p id="rating"></p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Skills Offered</h3>
+      <div class="skills" id="skillsOffered"></div>
+    </div>
+
+    <div class="section">
+      <h3>Skills Wanted</h3>
+      <div class="skills" id="skillsWanted"></div>
+    </div>
+
+    <div class="message-box">
+      <h3>Send a Message</h3>
+      <textarea id="messageText" placeholder="Type your message here..."></textarea>
+      <button onclick="sendMessage()">Send Message</button>
+    </div>
+  </div>
+
+  <script>
+    const profile = JSON.parse(localStorage.getItem("selectedProfile"));
+    if (!profile) {
+      document.body.innerHTML = '<p style="text-align:center; margin-top: 40px;">No profile data found.</p>';
+    } else {
+      document.getElementById("photo").src = profile.photo || "https://via.placeholder.com/100";
+      document.getElementById("name").textContent = profile.name;
+      document.getElementById("availability").textContent = "Availability: " + profile.availability;
+      document.getElementById("rating").textContent = "Rating: " + profile.rating + "/5";
+
+      document.getElementById("skillsOffered").innerHTML = profile.skillsOffered.map(skill => `<span>${skill}</span>`).join('');
+      document.getElementById("skillsWanted").innerHTML = profile.skillsWanted.map(skill => `<span>${skill}</span>`).join('');
+    }
+
+    function sendMessage() {
+      const msg = document.getElementById("messageText").value;
+      if (msg.trim() !== "") {
+        alert("Message sent: " + msg);
+        document.getElementById("messageText").value = "";
+      } else {
+        alert("Please write a message before sending.");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+[
+  {
+    "sender": "Ankita",
+    "receiver": "Rudra Patel",
+    "messages": [
+      { "from": "Ankita", "text": "Hi, interested in skill swap?" },
+      { "from": "Rudra", "text": "Yes, let's connect!" }
+    ]
+  },
+  {
+    "sender": "Ankita",
+    "receiver": "Michell",
+    "messages": [
+      { "from": "Ankita", "text": "I can help with JavaScript." },
+      { "from": "Michell", "text": "Great! When are you available?" }
+    ]
+  }
+]

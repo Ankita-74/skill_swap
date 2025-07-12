@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TalentTrade</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4fb;
+    margin: 0;
+    padding: 20px;
+    color: #222;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #1a73e8;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .tab {
+    cursor: pointer;
+    padding: 12px 28px;
+    margin: 0 6px;
+    font-weight: 600;
+    color: #666;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+  }
+  .tab.active {
+    color: #1a73e8;
+    border-color: #1a73e8;
+  }
+
+  .search-box {
+    width: 100%;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .search-box input {
+    width: 400px;
+    padding: 10px 14px;
+    border-radius: 20px;
+    border: 1.5px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .search-box input:focus {
+    border-color: #1a73e8;
+  }
+
+  .requests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .request-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 12px rgb(26 115 232 / 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .request-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #dbe9ff;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .user-info {
+    min-width: 0;
+  }
+  .user-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+    color: #1a4cbc;
+  }
+  .skills-list {
+    font-size: 0.9rem;
+    color: #444;
+  }
+  .skills-list strong {
+    color: #1a73e8;
+  }
+  .skills-list span {
+    margin-right: 8px;
+  }
+
+  .request-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 120px;
+  }
+
+  .request-date {
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 8px;
+  }
+  button {
+    cursor: pointer;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  button.accept-btn {
+    background-color: #1a73e8;
+    color: white;
+  }
+  button.accept-btn:hover {
+    background-color: #155ab6;
+  }
+  button.reject-btn {
+    background-color: #e24e42;
+    color: white;
+  }
+  button.reject-btn:hover {
+    background-color: #b03c33;
+  }
+  button.delete-btn {
+    background-color: #888;
+    color: white;
+  }
+  button.delete-btn:hover {
+    background-color: #555;
+  }
+
+  @media (max-width: 600px) {
+    .request-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .request-right {
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Swap Requests</h1>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="pending">Pending Requests</div>
+      <div class="tab" data-tab="accepted">Accepted Requests</div>
+    </div>
+
+    <div class="search-box">
+      <input type="search" id="searchInput" placeholder="Search by skill or name..." />
+    </div>
+
+    <div class="requests-list" id="requestsList">
+      <!-- Request cards will be rendered here -->
+    </div>
+  </div>
+
+<script>
+  const requests = [
+    {
+      id: 1,
+      name: "Alice Johnson",
+      photo: "https://randomuser.me/api/portraits/women/44.jpg",
+      skillsOffered: ["Photoshop", "Illustrator"],
+      skillsWanted: ["Excel", "Public Speaking"],
+      location: "Ahmedabad, Gujarat",
+      availability: "Weekends",
+      rating: 4.2,
+      date: "2025-07-10",
+      status: "pending"
+    },
+    {
+      id: 2,
+      name: "Bob Smith",
+      photo: "https://randomuser.me/api/portraits/men/46.jpg",
+      skillsOffered: ["JavaScript", "React"],
+      skillsWanted: ["UI Design", "Photoshop"],
+      location: "Surat, Gujarat",
+      availability: "Weekdays",
+      rating: 3.8,
+      date: "2025-07-09",
+      status: "accepted"
+    },
+    {
+      id: 3,
+      name: "Carol Lee",
+      photo: "https://randomuser.me/api/portraits/women/68.jpg",
+      skillsOffered: ["Excel", "Data Analysis"],
+      skillsWanted: ["Photoshop"],
+      location: "Rajkot, Gujarat",
+      availability: "Any",
+      rating: 4.7,
+      date: "2025-07-11",
+      status: "pending"
+    },
+    {
+      id: 4,
+      name: "David Mehra",
+      photo: "https://randomuser.me/api/portraits/men/33.jpg",
+      skillsOffered: ["Python", "Data Science"],
+      skillsWanted: ["Web Design"],
+      location: "Vadodara, Gujarat",
+      availability: "Evenings",
+      rating: 4.5,
+      date: "2025-07-12",
+      status: "pending"
+    }
+  ];
+
+  const tabs = document.querySelectorAll('.tab');
+  const requestsList = document.getElementById('requestsList');
+  const searchInput = document.getElementById('searchInput');
+
+  let activeTab = 'pending';
+
+  function renderRequests() {
+    const filterText = searchInput.value.toLowerCase().trim();
+    requestsList.innerHTML = '';
+
+    const filteredRequests = requests.filter(r => {
+      if (r.status !== activeTab) return false;
+      if (!filterText) return true;
+      const nameMatch = r.name.toLowerCase().includes(filterText);
+      const skillMatch = r.skillsOffered.some(s => s.toLowerCase().includes(filterText)) ||
+                         r.skillsWanted.some(s => s.toLowerCase().includes(filterText));
+      return nameMatch || skillMatch;
+    });
+
+    if (filteredRequests.length === 0) {
+      requestsList.innerHTML = '<p style="text-align:center; color:#888; font-style:italic;">No requests found.</p>';
+      return;
+    }
+
+    filteredRequests.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'request-card';
+
+      card.innerHTML = `
+        <div class="request-left">
+          <div class="avatar">
+            <img src="${r.photo}" alt="${r.name}" />
+          </div>
+          <div class="user-info">
+            <div class="user-name">${r.name}</div>
+            <div class="skills-list">
+              <strong>Offers:</strong> ${r.skillsOffered.map(s => `<span>${s}</span>`).join(', ')}<br/>
+              <strong>Wants:</strong> ${r.skillsWanted.map(s => `<span>${s}</span>`).join(', ')}<br/>
+              <strong>Location:</strong> ${r.location}<br/>
+              <strong>Availability:</strong> ${r.availability}<br/>
+              <strong>Rating:</strong> ${r.rating}/5
+            </div>
+          </div>
+        </div>
+        <div class="request-right">
+          <div class="request-date">Requested on: ${r.date}</div>
+          <div class="btn-group">
+            ${r.status === 'pending' ? `
+              <button class="accept-btn" data-id="${r.id}">Accept</button>
+              <button class="reject-btn" data-id="${r.id}">Reject</button>
+            ` : ''}
+            <button class="delete-btn" data-id="${r.id}">Delete</button>
+          </div>
+        </div>
+      `;
+
+      requestsList.appendChild(card);
+    });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (tab.classList.contains('active')) return;
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeTab = tab.dataset.tab;
+      renderRequests();
+    });
+  });
+
+  searchInput.addEventListener('input', renderRequests);
+
+  requestsList.addEventListener('click', e => {
+    if (e.target.tagName !== 'BUTTON') return;
+
+    const id = parseInt(e.target.dataset.id);
+    const action = e.target.className;
+
+    const reqIndex = requests.findIndex(r => r.id === id);
+    if (reqIndex === -1) return;
+
+    if (action.includes('accept-btn')) {
+      requests[reqIndex].status = 'accepted';
+      alert(`Swap request from ${requests[reqIndex].name} accepted!`);
+    } else if (action.includes('reject-btn') || action.includes('delete-btn')) {
+      requests.splice(reqIndex, 1);
+      alert('Swap request removed.');
+    }
+
+    renderRequests();
+  });
+
+  renderRequests();
+</script>
+</body>
+</html>

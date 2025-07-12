@@ -1,0 +1,240 @@
+<!-- Paste this in your .html file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - TalentTrade</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .nav-tabs .nav-link.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+    }
+    .chat-message {
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      max-width: 75%;
+    }
+    .chat-left {
+      background: #e9f5ff;
+      align-self: flex-start;
+    }
+    .chat-right {
+      background: #d1ffd6;
+      align-self: flex-end;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Admin Panel</a>
+      <button class="btn btn-outline-light" onclick="logoutAdmin()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <ul class="nav nav-tabs mb-4" id="adminTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">Users</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="swaps-tab" data-bs-toggle="tab" data-bs-target="#swaps" type="button" role="tab">Swap Requests</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab">Messages</button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="adminTabContent">
+      <!-- Users Tab -->
+      <div class="tab-pane fade show active" id="users" role="tabpanel">
+        <div class="card">
+          <div class="card-header bg-primary text-white">User Management</div>
+          <div class="card-body">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Location</th>
+                  <th>Skills</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Swap Requests Tab -->
+      <div class="tab-pane fade" id="swaps" role="tabpanel">
+        <div class="card">
+          <div class="card-header bg-primary text-white">Swap Requests</div>
+          <div class="card-body">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="swapTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages Tab -->
+      <div class="tab-pane fade" id="messages" role="tabpanel">
+        <div class="card">
+          <div class="card-header bg-primary text-white">Chat Logs</div>
+          <div class="card-body chat-container" id="messageLog"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem("isAdminLoggedIn") !== "true") {
+      window.location.href = "admin-login.html";
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem("isAdminLoggedIn");
+      window.location.href = "admin-login.html";
+    }
+
+    const users = [
+      {
+        id: 1,
+        name: "Ankita Devda",
+        email: "ankita@example.com",
+        location: "Rajkot",
+        blocked: false,
+        skillsOffered: ["HTML", "CSS"],
+        skillsWanted: ["React"]
+      },
+      {
+        id: 2,
+        name: "Rudra Patel",
+        email: "rudra@example.com",
+        location: "Ahmedabad",
+        blocked: true,
+        skillsOffered: ["Photoshop"],
+        skillsWanted: ["Public Speaking", "Excel"]
+      }
+    ];
+
+    const swaps = [
+      { from: "Rudra Patel", to: "Ankita Devda", status: "Pending", date: "2025-07-11" },
+      { from: "Ankita Devda", to: "Michell", status: "Accepted", date: "2025-07-10" }
+    ];
+
+    const messages = [
+      { sender: "Ankita", text: "Hello!", time: "10:30 AM", self: true },
+      { sender: "Rudra", text: "Hi, let's swap skills.", time: "10:32 AM", self: false },
+      { sender: "Ankita", text: "Sure, I’m available this weekend.", time: "10:34 AM", self: true }
+    ];
+
+    function renderUsers() {
+      const tbody = document.getElementById("userTable");
+      tbody.innerHTML = '';
+      users.forEach((user, index) => {
+        const skills = `
+          <strong>Offers:</strong> ${user.skillsOffered.join(', ')}<br/>
+          <strong>Wants:</strong> ${user.skillsWanted.join(', ')}
+        `;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.location}</td>
+          <td>${skills}</td>
+          <td><span class="badge ${user.blocked ? 'bg-danger' : 'bg-success'}">
+            ${user.blocked ? 'Blocked' : 'Active'}</span></td>
+          <td>
+            <button class="btn btn-sm btn-danger" onclick="removeUser(${user.id})">Remove</button>
+            <button class="btn btn-sm ${user.blocked ? 'btn-success' : 'btn-warning'}" onclick="toggleBlock(${user.id})">
+              ${user.blocked ? 'Unblock' : 'Block'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function removeUser(id) {
+      const index = users.findIndex(u => u.id === id);
+      if (index > -1) {
+        users.splice(index, 1);
+        renderUsers();
+      }
+    }
+
+    function toggleBlock(id) {
+      const user = users.find(u => u.id === id);
+      if (user) {
+        user.blocked = !user.blocked;
+        renderUsers();
+      }
+    }
+
+    function renderSwaps() {
+      const tbody = document.getElementById("swapTable");
+      tbody.innerHTML = '';
+      swaps.forEach((swap, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${swap.from}</td>
+            <td>${swap.to}</td>
+            <td>${swap.date}</td>
+            <td>${swap.status}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderMessages() {
+      const log = document.getElementById("messageLog");
+      log.innerHTML = '';
+      messages.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `chat-message ${msg.self ? 'chat-right ms-auto' : 'chat-left'}`;
+        div.innerHTML = `<strong>${msg.sender}</strong> (${msg.time}):<br/>${msg.text}`;
+        log.appendChild(div);
+      });
+    }
+
+    window.onload = () => {
+      renderUsers();
+      renderSwaps();
+      renderMessages();
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

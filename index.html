@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Swap Platform</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f4;
+      color: #222;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 1.8rem; }
+    .user-info { font-size: 1rem; }
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .top-right { display: flex; align-items: center; }
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .filter-search {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filter-search select,
+    .filter-search input[type="text"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .filter-search input[type="text"] { flex-grow: 1; }
+    .filter-search button {
+      padding: 10px 18px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .user-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .profile-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+    .user-info-block { flex: 1; }
+    .skills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .skills span {
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+    .request-btn {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .pagination {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .pagination button {
+      background: white;
+      border: 1px solid #3498db;
+      color: #3498db;
+      margin: 0 4px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .pagination button.active {
+      background: #3498db;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TalentTrade</h1>
+    <div class="top-right">
+      <a href="profile.html">
+        <img src="uploads/Capture.PNG" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+      </a>
+      <div class="user-info" id="userDisplay">Welcome</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="filter-search">
+      <select id="availability">
+        <option>Availability</option>
+        <option>Available</option>
+        <option>Not Available</option>
+      </select>
+      <input type="text" id="searchBox" placeholder="Search skills or users">
+      <button onclick="search()">Search</button>
+    </div>
+
+    <div id="profile-list"></div>
+    <div class="pagination">
+      <button>&lt;</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>&gt;</button>
+    </div>
+  </div>
+
+  <script>
+    const username = localStorage.getItem("username");
+    if (!username) {
+      window.location.href = "screen2.html";
+    } else {
+      document.getElementById("userDisplay").textContent = "Welcome, " + username;
+    }
+
+    function logout() {
+      localStorage.removeItem("username");
+      window.location.href = "screen2.html";
+    }
+
+    const profiles = [
+      {
+        name: "Rudra Patel",
+        photo: "https://randomuser.me/api/portraits/men/75.jpg",
+        skillsOffered: ["JavaScript", "Python"],
+        skillsWanted: ["Marketing", "Design"],
+        availability: "Weekends",
+        rating: 3.9,
+        link: "rudra.html"
+      },
+      {
+        name: "Michell",
+        photo: "https://randomuser.me/api/portraits/women/65.jpg",
+        skillsOffered: ["JavaScript", "Python"],
+        skillsWanted: ["Marketing", "Graphic designer"],
+        availability: "Evenings",
+        rating: 2.5,
+        link: "michell.html"
+      },
+      {
+        name: "Joe Wills",
+        photo: "https://randomuser.me/api/portraits/men/85.jpg",
+        skillsOffered: ["JavaScript", "Python"],
+        skillsWanted: ["Marketing", "Graphic designer"],
+        availability: "Weekdays",
+        rating: 4.0,
+        link: "joe.html"
+      },
+      {
+        name: "Nisha Desai",
+        photo: "https://randomuser.me/api/portraits/women/23.jpg",
+        skillsOffered: ["UI/UX Design", "Figma"],
+        skillsWanted: ["React", "Node.js"],
+        availability: "Weekends",
+        rating: 4.8,
+        link: "nisha.html"
+      },
+      {
+        name: "Arjun Mehta",
+        photo: "https://randomuser.me/api/portraits/men/48.jpg",
+        skillsOffered: ["C++", "Data Structures"],
+        skillsWanted: ["JavaScript", "Web Development"],
+        availability: "Mornings",
+        rating: 4.2,
+        link: "arjun.html"
+      }
+    ];
+
+    function renderProfiles(list) {
+      const container = document.getElementById('profile-list');
+      container.innerHTML = '';
+      list.forEach(profile => {
+        const card = document.createElement('div');
+        card.className = 'user-card';
+        card.innerHTML = `
+          <a href="${profile.link}" target="_blank">
+            <img src="${profile.photo}" alt="${profile.name}" class="profile-photo" />
+          </a>
+          <div class="user-info-block">
+            <h3>${profile.name}</h3>
+            <div><b>Skills Wanted:</b>
+              <div class="skills">
+                ${profile.skillsWanted.map(skill => `<span>${skill}</span>`).join(' ')}
+              </div>
+            </div>
+            <div style="margin-top:10px;"><b>Skills Offered:</b>
+              <div class="skills">
+                ${profile.skillsOffered.map(skill => `<span>${skill}</span>`).join(' ')}
+              </div>
+            </div>
+            <div style="margin-top:10px;">Availability: ${profile.availability}</div>
+            <div style="margin-top:10px;">Rating: ${profile.rating}/5</div>
+          </div>
+          <a href="main.html" class="request-btn">Swap Request</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function search() {
+      const query = document.getElementById('searchBox').value.toLowerCase();
+      const filtered = profiles.filter(profile => 
+        profile.name.toLowerCase().includes(query) ||
+        profile.skillsOffered.some(skill => skill.toLowerCase().includes(query)) ||
+        profile.skillsWanted.some(skill => skill.toLowerCase().includes(query))
+      );
+      renderProfiles(filtered);
+    }
+
+    renderProfiles(profiles);
+  </script>
+</body>
+</html>
