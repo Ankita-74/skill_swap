@@ -19,9 +19,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
     }
     header h1 { font-size: 1.8rem; }
-    .user-info { font-size: 1rem; }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .user-info {
+      font-size: 1rem;
+    }
     .logout-btn {
       background: #e74c3c;
       color: white;
@@ -29,18 +38,32 @@
       padding: 8px 16px;
       border-radius: 6px;
       cursor: pointer;
-      margin-left: 10px;
     }
-    .top-right { display: flex; align-items: center; }
+    .admin-btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background-color: #343a40;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .admin-btn:hover {
+      background-color: #23272b;
+    }
+
     .container {
       max-width: 1200px;
       margin: 30px auto;
       padding: 0 20px;
     }
+
     .filter-search {
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     .filter-search select,
     .filter-search input[type="text"] {
@@ -49,7 +72,10 @@
       border: 1px solid #ccc;
       font-size: 1rem;
     }
-    .filter-search input[type="text"] { flex-grow: 1; }
+    .filter-search input[type="text"] {
+      flex-grow: 1;
+      min-width: 200px;
+    }
     .filter-search button {
       padding: 10px 18px;
       background-color: #3498db;
@@ -59,6 +85,7 @@
       font-weight: bold;
       cursor: pointer;
     }
+
     .user-card {
       background: white;
       border-radius: 10px;
@@ -66,21 +93,28 @@
       padding: 20px;
       margin-bottom: 20px;
       display: flex;
+      flex-wrap: wrap;
       gap: 20px;
       align-items: center;
     }
+
     .profile-photo {
       width: 80px;
       height: 80px;
       border-radius: 50%;
     }
-    .user-info-block { flex: 1; }
+
+    .user-info-block {
+      flex: 1;
+    }
+
     .skills {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       margin-top: 6px;
     }
+
     .skills span {
       background-color: #ecf0f1;
       color: #2c3e50;
@@ -88,6 +122,7 @@
       border-radius: 12px;
       font-size: 0.9rem;
     }
+
     .request-btn {
       background-color: #3498db;
       color: white;
@@ -96,11 +131,14 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
+      text-decoration: none;
     }
+
     .pagination {
       text-align: center;
       margin-top: 30px;
     }
+
     .pagination button {
       background: white;
       border: 1px solid #3498db;
@@ -110,6 +148,7 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
     .pagination button.active {
       background: #3498db;
       color: white;
@@ -121,9 +160,10 @@
     <h1>TalentTrade</h1>
     <div class="top-right">
       <a href="profile.html">
-        <img src="uploads/Capture.PNG" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+        <img src="uploads/Capture.PNG" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%;">
       </a>
       <div class="user-info" id="userDisplay">Welcome</div>
+      <a href="server/admin-login.html" class="admin-btn">Admin</a>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </header>
@@ -140,6 +180,7 @@
     </div>
 
     <div id="profile-list"></div>
+
     <div class="pagination">
       <button>&lt;</button>
       <button class="active">1</button>
@@ -176,7 +217,7 @@
         name: "Michell",
         photo: "https://randomuser.me/api/portraits/women/65.jpg",
         skillsOffered: ["JavaScript", "Python"],
-        skillsWanted: ["Marketing", "Graphic designer"],
+        skillsWanted: ["Marketing", "Graphic design"],
         availability: "Evenings",
         rating: 2.5,
         link: "michell.html"
@@ -185,7 +226,7 @@
         name: "Joe Wills",
         photo: "https://randomuser.me/api/portraits/men/85.jpg",
         skillsOffered: ["JavaScript", "Python"],
-        skillsWanted: ["Marketing", "Graphic designer"],
+        skillsWanted: ["Marketing", "Graphic design"],
         availability: "Weekdays",
         rating: 4.0,
         link: "joe.html"
@@ -243,7 +284,7 @@
 
     function search() {
       const query = document.getElementById('searchBox').value.toLowerCase();
-      const filtered = profiles.filter(profile => 
+      const filtered = profiles.filter(profile =>
         profile.name.toLowerCase().includes(query) ||
         profile.skillsOffered.some(skill => skill.toLowerCase().includes(query)) ||
         profile.skillsWanted.some(skill => skill.toLowerCase().includes(query))
